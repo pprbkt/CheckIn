@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Strict Mobile Viewport -->
+    <title>CheckIn</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-title" id="header-title">CHECKIN</div>
+    </header>
+
+    <!-- Page: Dashboard (Home) -->
+    <main id="dashboard" class="page active">
+        <div id="dashboard-list">
+            <!-- Subject Cards -->
+        </div>
+        <button class="mono-btn" style="margin: 16px; width: calc(100% - 32px); background: white; color: black;"
+            onclick="openAddExtraClassModal()">+ EXTRA CLASS</button>
+        <div style="height: 40px"></div> <!-- Spacer for FAB -->
+    </main>
+
+    <!-- Page: Timetable (Was Subjects) -->
+    <main id="timetable" class="page">
+        <div id="timetable-list" style="padding-bottom:100px">
+            <!-- Timetable generated here -->
+        </div>
+    </main>
+
+    <!-- Page: Settings -->
+    <main id="settings" class="page">
+        <div class="mono-card">
+            <h3 style="font-weight:900; font-size:24px; margin-bottom:16px;">SETTINGS</h3>
+
+            <label style="font-weight: 900; display: block; margin-bottom: 8px;">COURSE START DATE</label>
+            <input type="date" id="start-date-input" class="mono-input" style="font-size:16px">
+            <button class="mono-btn" onclick="saveSettings()">SAVE SETTINGS</button>
+
+            <hr style="border-top:2px dashed black; margin: 24px 0;">
+
+            <h3 style="font-weight:900; margin-bottom:12px;">ATTENDANCE GOAL</h3>
+            <div class="mono-card" style="margin-bottom:24px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <label style="font-weight:bold;">Minimum %</label>
+                    <span id="min-attendance-display" style="font-weight:900; font-size:18px;">75%</span>
+                </div>
+                <input type="range" id="min-attendance-slider" min="1" max="100" value="75"
+                    style="width:100%; height:8px; accent-color:black;" oninput="updateMinAttendance(this.value)">
+                <p style="font-size:12px; color:#666; margin-top:8px; line-height:1.4;">
+                    Updates the target for ALL subjects.
+                </p>
+            </div>
+
+            <div class="mono-card" style="text-align:center; padding:30px;" onclick="openSubjectManager()">
+                <span style="font-weight:900; font-size:18px;">MANAGE SUBJECTS</span>
+            </div>
+            <hr style="border-top:2px dashed black; margin: 24px 0;">
+
+            <button class="mono-btn" style="background:var(--nb-red); color:white" onclick="clearData()">RESET ALL
+                DATA</button>
+            <div style="text-align:center; margin-top:20px; font-weight:700; color:#666">v4.0 Editable</div>
+        </div>
+    </main>
+
+    <!-- Add Class Modal (Popup) -->
+    <div id="add-class-modal" class="popup-overlay">
+        <div class="popup-content">
+            <div class="header-title"
+                style="margin: 0 auto 24px auto; width: fit-content; transform: rotate(2deg); font-size: 18px;">ADD
+                CLASS</div>
+
+            <label style="font-weight: 900; display: block; margin-bottom: 8px;">DAY</label>
+            <select id="class-day" class="mono-input">
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+            </select>
+
+            <label style="font-weight: 900; display: block; margin-bottom: 8px;">SUBJECT NAME</label>
+            <select id="class-subject" class="mono-input">
+                <!-- Populated by JS -->
+            </select>
+
+            <label style="font-weight: 900; display: block; margin-bottom: 8px;">TIME</label>
+            <input type="text" id="class-time" class="mono-input" placeholder="e.g. 10:00 - 11:00">
+
+            <button class="mono-btn" onclick="saveClass()" style="background:black; color:white;">ADD TO
+                TIMETABLE</button>
+            <button class="mono-btn" onclick="closeAddClassModal()"
+                style="background:white; color:black; border:none; box-shadow:none; margin-bottom:0">CANCEL</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-tab active" onclick="navTo('dashboard')" id="tab-dashboard">
+            <span class="nav-icon">🏠</span>
+            Home
+        </button>
+        <button class="nav-tab" onclick="navTo('timetable')" id="tab-timetable">
+            <span class="nav-icon">📅</span>
+            Timetable
+        </button>
+        <button class="nav-tab" onclick="navTo('settings')" id="tab-settings">
+            <span class="nav-icon">⚙️</span>
+            Settings
+        </button>
+    </nav>
+
+    <!-- Modals (Fullscreen overlay style) -->
+
+    <!-- Add Subject Modal -->
+    <div id="add-subject-modal" class="page"
+        style="background: rgba(255,255,255,0.95); backdrop-filter:blur(5px); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 600; padding-top: 40px;">
+        <div class="header-title" style="margin: 0 auto 40px auto; width: fit-content; transform: rotate(2deg);">NEW
+            SUBJECT</div>
+        <div class="container">
+            <label style="font-weight: 900; display: block; margin-bottom: 8px;">NAME</label>
+            <input type="text" id="subject-name" class="mono-input" placeholder="e.g. MATHS">
+
+            <label style="font-weight: 900; display: block; margin-bottom: 8px;">TARGET %</label>
+            <input type="number" id="min-attendance" class="mono-input" value="75">
+
+            <button class="mono-btn" onclick="saveSubject()" style="background:black; color:white;">CREATE
+                SUBJECT</button>
+            <button class="mono-btn" onclick="navTo('dashboard')"
+                style="background:transparent; color:black; border:none; box-shadow:none;">CANCEL</button>
+        </div>
+    </div>
+
+    <!-- Add Extra Class Modal (Popup) -->
+    <div id="add-extra-class-modal" class="popup-overlay">
+        <div class="popup-content">
+            <div class="header-title"
+                style="margin: 0 auto 24px auto; width: fit-content; transform: rotate(-2deg); font-size: 18px;">EXTRA
+                CLASS</div>
+
+            <label style="font-weight: 900; display: block; margin-bottom: 8px;">SELECT SUBJECT</label>
+            <select id="extra-class-subject" class="mono-input" style="margin-bottom: 24px;">
+                <!-- Options populated by JS -->
+            </select>
+
+            <button class="mono-btn" onclick="saveExtraClass()" style="background:black; color:white;">ADD NOW</button>
+            <button class="mono-btn" onclick="closeAddExtraClassModal()"
+                style="background:white; color:black; border:none; box-shadow:none; margin-bottom:0">CANCEL</button>
+        </div>
+    </div>
+
+    <!-- Manage Subjects Modal (Popup) -->
+    <div id="manage-subjects-modal" class="popup-overlay">
+        <div class="popup-content" style="max-height: 80vh; display: flex; flex-direction: column;">
+            <div class="header-title"
+                style="margin: 0 auto 16px auto; width: fit-content; transform: rotate(1deg); font-size: 18px;">SUBJECTS
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+                <input type="text" id="new-subject-name" class="mono-input" placeholder="New Subject"
+                    style="margin-bottom: 0; padding: 12px; font-size: 16px;">
+                <button class="mono-btn" onclick="addNewSubject()"
+                    style="width: auto; margin-bottom: 0; padding: 0 16px; background: black; color: white;">+</button>
+            </div>
+
+            <div id="subjects-list"
+                style="overflow-y: auto; flex: 1; margin-bottom: 16px; border: 2px solid #eee; border-radius: 8px; padding: 8px;">
+                <!-- List populated by JS -->
+            </div>
+
+            <button class="mono-btn" onclick="closeSubjectManager()"
+                style="background:white; color:black; border:none; box-shadow:none; margin-bottom:0">CLOSE</button>
+        </div>
+    </div>
+
+    <!-- Detail View Modal -->
+    <div id="detail-view" class="page"
+        style="background: #FFFDF5; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 600; padding: 0; max-width: 100%;">
+        <header class="app-header" style="background: white; justify-content: space-between; padding: 0 16px;">
+            <button onclick="closeDetail()"
+                style="background:none; border:none; font-size:24px; font-weight:900;">←</button>
+            <div class="header-title" id="detail-title" style="font-size:16px">DETAILS</div>
+            <div style="width:24px"></div>
+        </header>
+
+        <div class="container" style="padding: 20px;">
+            <div class="detail-big-stat" id="detail-percent">0%</div>
+            <div style="text-align:center; margin-bottom:20px;">
+                <div class="prediction-box" id="detail-prediction" style="background:white">Calculating...</div>
+            </div>
+
+            <div class="action-bar" style="margin-bottom: 32px;">
+                <button class="mono-btn-small btn-present" onclick="markAttendance('PRESENT')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </button>
+                <button class="mono-btn-small btn-absent" onclick="markAttendance('ABSENT')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <button class="mono-btn-small btn-cancel" onclick="markAttendance('CANCELLED')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <h3 style="border-bottom: 3px solid black; padding-bottom: 8px; font-weight:900">HISTORY</h3>
+            <div id="history-list" style="margin-top: 16px; padding-bottom: 100px;">
+                <!-- History Items -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Global FAB -->
+    <button class="fab-corner" onclick="openAddSubject()">+</button>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

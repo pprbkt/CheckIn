@@ -1,0 +1,433 @@
+:root {
+    --primary: #000000;
+    --bg-color: #FFFDF5;
+    --card-bg: #FFFFFF;
+
+    /* Neo-Brutalist Palette */
+    --nb-yellow: #FFDE59;
+    --nb-orange: #FF914D;
+    --nb-red: #FF5757;
+    --nb-pink: #FF66C4;
+    --nb-blue: #5CE1E6;
+    --nb-purple: #CB6CE6;
+    --nb-green: #7ED957;
+
+    --border-width: 3px;
+    --hard-shadow: 4px 4px 0px 0px #000000;
+    --hard-shadow-active: 2px 2px 0px 0px #000000;
+    --nav-height: 80px;
+}
+
+body {
+    background-color: var(--bg-color);
+    font-family: 'Inter', sans-serif;
+    color: var(--primary);
+    margin: 0;
+    padding-bottom: calc(var(--nav-height) + 20px);
+    /* Space for bottom nav */
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    /* Remove mobile tap highlight */
+}
+
+/* Header - Simplified for Mobile */
+.app-header {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: var(--border-width) solid var(--primary);
+    background: var(--nb-yellow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-title {
+    font-weight: 900;
+    font-size: 20px;
+    text-transform: uppercase;
+    background: white;
+    padding: 6px 16px;
+    border: var(--border-width) solid black;
+    box-shadow: 3px 3px 0px 0px black;
+    transform: rotate(-1deg);
+}
+
+/* Bottom Navigation - The Mobile Key */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: var(--nav-height);
+    background: white;
+    border-top: var(--border-width) solid black;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 500;
+    box-shadow: 0px -4px 0px 0px rgba(0, 0, 0, 0.1);
+}
+
+.nav-tab {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #999;
+    border-right: 1px solid #eee;
+    transition: all 0.2s;
+}
+
+.nav-tab:last-child {
+    border-right: none;
+}
+
+.nav-tab.active {
+    background: var(--nb-blue);
+    color: black;
+    box-shadow: inset 0px -4px 0px 0px black;
+}
+
+.nav-icon {
+    font-size: 24px;
+    margin-bottom: 4px;
+    display: block;
+}
+
+/* Page Layout */
+.page {
+    display: none;
+    padding: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+    animation: slideUp 0.2s ease-out;
+}
+
+.page.active {
+    display: block;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Cards (Thumb Friendly) */
+.mono-card {
+    background: white;
+    border: var(--border-width) solid var(--primary);
+    margin-bottom: 20px;
+    padding: 20px;
+    box-shadow: var(--hard-shadow);
+    transition: all 0.1s;
+    border-radius: 12px;
+    /* Slight radius for "app" feel */
+    position: relative;
+}
+
+.mono-card:active {
+    transform: scale(0.98);
+    box-shadow: var(--hard-shadow-active);
+}
+
+.subject-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 12px;
+}
+
+/* Badge for name */
+.subject-name {
+    font-size: 18px;
+    font-weight: 900;
+    text-transform: uppercase;
+    background: var(--nb-blue);
+    padding: 6px 10px;
+    border: 2px solid black;
+    border-radius: 6px;
+    line-height: 1.2;
+}
+
+.stats-row {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #444;
+}
+
+/* Prediction Box */
+.prediction-box {
+    font-size: 12px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    border: 2px solid black;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+/* Progress Bar */
+.progress-container {
+    height: 24px;
+    /* Thicker for visibility */
+    border: var(--border-width) solid var(--primary);
+    margin-top: 12px;
+    background: white;
+    box-shadow: 2px 2px 0px 0px black;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-right: 2px solid black;
+    transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* Bouncy fill */
+}
+
+.progress-good {
+    background: var(--nb-green);
+}
+
+.progress-bad {
+    background: var(--nb-red);
+}
+
+/* Buttons & Inputs */
+.mono-input {
+    width: 100%;
+    padding: 16px;
+    border: var(--border-width) solid var(--primary);
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 700;
+    outline: none;
+    box-shadow: 4px 4px 0px 0px #000;
+    background: white;
+    box-sizing: border-box;
+    border-radius: 8px;
+}
+
+.mono-btn {
+    border: var(--border-width) solid var(--primary);
+    background: var(--nb-blue);
+    color: black;
+    padding: 16px;
+    /* Larger tap area */
+    font-weight: 900;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 16px;
+    box-shadow: var(--hard-shadow);
+    margin-bottom: 12px;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.mono-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: var(--hard-shadow-active);
+}
+
+/* Action Bar Buttons - BIG TOUCH TARGETS */
+.action-bar {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.mono-btn-small {
+    flex: 1;
+    border: var(--border-width) solid var(--primary);
+    padding: 16px 0;
+    /* Tall buttons */
+    font-weight: 900;
+    cursor: pointer;
+    font-size: 20px;
+    /* Big text */
+    box-shadow: 3px 3px 0px 0px #000;
+    border-radius: 8px;
+    touch-action: manipulation;
+}
+
+.btn-present {
+    background: var(--nb-green);
+}
+
+.btn-absent {
+    background: var(--nb-red);
+}
+
+.btn-cancel {
+    background: var(--nb-yellow);
+}
+
+.mono-btn-small:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0px 0px black;
+}
+
+/* FAB */
+.fab-corner {
+    position: fixed;
+    bottom: 100px;
+    /* Above nav bar */
+    right: 20px;
+    width: 64px;
+    height: 64px;
+    background: black;
+    color: var(--nb-yellow);
+    border: none;
+    font-size: 32px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.2);
+    z-index: 400;
+    border-radius: 20px;
+    /* Squircle */
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.fab-corner:active {
+    transform: scale(0.9);
+}
+
+.detail-big-stat {
+    font-size: 72px;
+    font-weight: 900;
+    text-align: center;
+    margin: 32px 0;
+    color: var(--nb-yellow);
+    -webkit-text-stroke: 3px black;
+    text-shadow: 4px 4px 0px black;
+}
+
+/* Small Action Buttons for Dashboard */
+.action-bar {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.mono-btn-small {
+    flex: 1;
+    border: var(--border-width) solid var(--primary);
+    padding: 12px 0;
+    /* Slightly reduced padding to fit icons nicely */
+    font-weight: 900;
+    cursor: pointer;
+    font-size: 20px;
+    box-shadow: 3px 3px 0px 0px #000;
+    border-radius: 8px;
+    touch-action: manipulation;
+    display: flex;
+    /* Center SVG */
+    align-items: center;
+    justify-content: center;
+}
+
+.mono-btn-small svg {
+    display: block;
+    /* Remove baseline space */
+}
+
+/* Popup Modal */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.popup-overlay.active {
+    display: flex;
+    /* Flex to center */
+}
+
+.popup-content {
+    background: white;
+    border: var(--border-width) solid black;
+    box-shadow: 8px 8px 0px 0px black;
+    padding: 24px;
+    border-radius: 16px;
+    width: 85%;
+    max-width: 320px;
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+}
+
+/* Edit Mode & Delete Button */
+.delete-btn {
+    display: block;
+    /* Always visible */
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    background: var(--nb-red);
+    color: white;
+    border: 2px solid black;
+    font-weight: 900;
+    padding: 4px 10px;
+    transform: rotate(-2deg);
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 2px 2px 0px black;
+    animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes shake {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(1deg);
+    }
+
+    75% {
+        transform: rotate(-1deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}

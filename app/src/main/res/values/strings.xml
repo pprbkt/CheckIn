@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">CheckIn</string>
+    <string name="title_home">Home</string>
+    <string name="title_timetable">Timetable</string>
+    <string name="action_add_subject">Add Subject</string>
+</resources>
